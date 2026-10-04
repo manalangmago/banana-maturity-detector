@@ -1,0 +1,34 @@
+version: "3.9"
+ 
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: banana-backend
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - banana-net
+ 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: banana-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - banana-net
+
+
+networks:
+  banana-net:
+    driver: bridge
+ 
